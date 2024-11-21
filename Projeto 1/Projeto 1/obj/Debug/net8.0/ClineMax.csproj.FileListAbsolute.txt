@@ -1,0 +1,28 @@
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\bin\Debug\net8.0\ClineMax.exe
+C:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\bin\Debug\net8.0\ClineMax.deps.json
+C:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\bin\Debug\net8.0\ClineMax.runtimeconfig.json
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\bin\Debug\net8.0\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\bin\Debug\net8.0\ClineMax.pdb
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.AssemblyInfoInputs.cache
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.AssemblyInfo.cs
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.csproj.CoreCompileInputs.cache
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\refint\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.pdb
+C:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ClineMax.genruntimeconfig.cache
+C:\Users\pedro\OneDrive\Área de Trabalho\ClineMax\obj\Debug\net8.0\ref\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\bin\Debug\net8.0\ClineMax.exe
+C:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\bin\Debug\net8.0\ClineMax.deps.json
+C:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\bin\Debug\net8.0\ClineMax.runtimeconfig.json
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\bin\Debug\net8.0\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\bin\Debug\net8.0\ClineMax.pdb
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.AssemblyInfoInputs.cache
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.AssemblyInfo.cs
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.csproj.CoreCompileInputs.cache
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\refint\ClineMax.dll
+c:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.pdb
+C:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ClineMax.genruntimeconfig.cache
+C:\Users\pedro\OneDrive\Área de Trabalho\Projeto 1\obj\Debug\net8.0\ref\ClineMax.dll
