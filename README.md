@@ -1,6 +1,6 @@
 # HealthMax - Aplicativo de Gestão Clínica
 HealthMax é um aplicativo de gestão clínica que facilita o gerenciamento de médicos, pacientes, mesas de restaurante e eventos. O sistema utiliza listas encadeadas,pilhas,filas e arvores para armazenar e organizar informações de forma dinâmica e eficiente.
-O programa é feito 100% em C# e desenvolvido por uma unica pessoa
+O programa é feito 100% em C# e desenvolvido por uma unica pessoa e esta aberto a mudanças para melhorar a eficiencia do codigo.
 
 Funcionalidades
 1. Gestão de Médicos
