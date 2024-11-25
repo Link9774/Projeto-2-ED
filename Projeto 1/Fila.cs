@@ -1,15 +1,18 @@
 class Fila<T>
 {
     private LinkedList<T> elementos;
+    private int contador;
 
     public Fila()
     {
         elementos = new LinkedList<T>();
+        contador = 0;
     }
 
     public void Queue(T item)
     {
         elementos.Add(item);
+        contador++;
     }
     public T Dequeue()
     {
@@ -19,6 +22,7 @@ class Fila<T>
         }
         T item = elementos.GetAt(0);
         elementos.RemoveAt(0);
+        contador --;
         return item;
     }
     public T Inicio()
@@ -36,11 +40,12 @@ class Fila<T>
 
     public int Size()
     {
-        return elementos.Count();
+        return contador;
     }
 public void Clear()
 {
     elementos.Clear();
+    contador = 0;
 }
 
 }

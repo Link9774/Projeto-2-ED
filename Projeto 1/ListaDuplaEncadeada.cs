@@ -1,3 +1,5 @@
+using System.Collections;
+
 class DoubleNode<T>
 {
     public T Data;
@@ -11,52 +13,59 @@ class DoubleNode<T>
         Previous = null;
     }
 }
-class DoubleLinkedList<T>
+class DoubleLinkedList<T> : IEnumerable<T>
 { 
     private DoubleNode<T> head;
     private DoubleNode<T> tail;
-
+    public int Count { get; private set; }
     public void Add(T data)
     {
-    DoubleNode<T> newNode = new DoubleNode<T>(data);
-    if (head == null)
+        DoubleNode<T> newNode = new DoubleNode<T>(data);
+        if (head == null)
         {
             head = newNode;
             tail = newNode;
-        }else{
+        }
+        else
+        {
             tail.Next = newNode;
             newNode.Previous = tail;
             tail = newNode;
-            }
+        }
     }
-public void Remove(T data)
-{
-    if(head == null) return;
-
-    DoubleNode<T> current = head;
-
-    while(current != null)
+ public void Remove(T data)
     {
-       if(current.Data.Equals(data))
-       {
-            if(current == head)
+        if (head == null) return;
+
+        DoubleNode<T> current = head;
+
+        while (current != null)
+        {
+            if (current.Data.Equals(data))
             {
-                head = current.Next;
-                if(head != null) head.Previous = null;
-            }
-            else if(current == tail)
-            {
-                tail = current.Previous;
-                tail.Next = null;
-            }else{
-                current.Previous.Next = current.Next;
-                current.Next.Previous = current.Previous;
+                if (current == head)
+                {
+                    head = current.Next;
+                    if (head != null) head.Previous = null;
+                }
+                else if (current == tail)
+                {
+                    tail = current.Previous;
+                    tail.Next = null;
+                }
+                else
+                {
+                    current.Previous.Next = current.Next;
+                    if (current.Next != null)
+                    {
+                        current.Next.Previous = current.Previous;
+                    }
                 }
                 break;
-       } 
-        current = current.Next;
+            }
+            current = current.Next;
+        }
     }
-}
 
 public void RemoveAt(int index)
 {
@@ -97,8 +106,6 @@ public void Clear()
     head = null;
     tail = null;
 }
-
-
 
 public void DisplayDireita()
 {
@@ -147,17 +154,7 @@ public int IndexOf(string data)
         return default(T);
     }   
     
-    public int Count()
-    {
-        DoubleNode<T> current = head;
-        int count = 0;
-        while (current != null)
-        {
-            count++;
-            current = current.Next;
-        }
-        return count;
-    }
+   
     public void ReplaceAt(int index, T newData)
     {
         DoubleNode<T> current = head;
@@ -173,9 +170,55 @@ public int IndexOf(string data)
             count++;
         }
     }
+public IEnumerator<T> GetEnumerator()
+    {
+        return new Enumerator(this);
+    }
 
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public class Enumerator : IEnumerator<T>
+    {
+        private DoubleNode<T> currentNode;
+        private DoubleLinkedList<T> list;
+
+        public Enumerator(DoubleLinkedList<T> list)
+        {
+            this.list = list;
+            currentNode = list.head;
+        }
+
+        public T Current
+        {
+            get
+            {
+                if (currentNode == null)
+                    throw new InvalidOperationException();
+                return currentNode.Data;
+            }
+        }
+
+        object IEnumerator.Current => Current;
+
+        public bool MoveNext()
+        {
+            if (currentNode == null) return false;
+            currentNode = currentNode.Next;
+            return currentNode != null;
+        }
+
+        public void Reset()
+        {
+            currentNode = list.head; 
+        }
+        public void Dispose()
+        {
+        }
+    }
 }
-
     
 
 

@@ -1,10 +1,18 @@
 ﻿ class Program
- {  static Pilha<AcaoParticipante> historicoAcoesP = new Pilha<AcaoParticipante>();
+ {  static Arvore<Itens> arvoreItens = new Arvore<Itens>();
+    static Arvore<Medico> arvoreMedicos = new Arvore<Medico>();
+    static PriorityQueue<Paciente> filaPrioritariaPacientes = new PriorityQueue<Paciente>(Comparer);
+    static Fila<string> filaEspera = new Fila<string>();
+    
+    
+    static Pilha<AcaoParticipante> historicoAcoesP = new Pilha<AcaoParticipante>();
     static Pilha<AcaoEvento> historicoAcoesE = new Pilha<AcaoEvento>();
     static Pilha<AcaoPedido> historicoCardapio = new Pilha<AcaoPedido>();
     static List<Pilha<AcaoPedido>> historicoPedidos = new List<Pilha<AcaoPedido>>();
     static Pilha<AcaoPaciente> historicoAcoes = new Pilha<AcaoPaciente>();
     static string welcome = "Bem vindo ao HealthMax, nosso aplicativo de gestão clínica";
+    
+    
     static LinkedList<Medico> listaMedicos = new LinkedList<Medico>();
     static LinkedList<Paciente> listaPacientes = new LinkedList<Paciente>();
     static LinkedList<Mesa> listaMesas = new LinkedList<Mesa>();
@@ -12,6 +20,20 @@
     static DoubleLinkedList<Itens> listaPedidos = new DoubleLinkedList<Itens>();
     static CircularLinkedList<Participantes> listaParticipantes = new CircularLinkedList<Participantes>(); 
     static LinkedList<Eventos> listaEventos = new LinkedList<Eventos>();
+     
+     static int Comparer(Paciente p1, Paciente p2)
+     {
+        var prioridade = new Dictionary<string,int>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Grave", 1 },
+            { "Pouca urgência", 2 },
+            { "Sem urgência", 3 }
+        };
+        int prioridade1 = prioridade.ContainsKey(p1.EstadoPaciente) ? prioridade[p1.EstadoPaciente] : int.MaxValue;
+        int prioridade2 = prioridade.ContainsKey(p2.EstadoPaciente) ? prioridade[p2.EstadoPaciente] : int.MaxValue;
+        
+       return prioridade1.CompareTo(prioridade2);
+     }
      
      static void InicializarMesas()
      {
@@ -66,7 +88,9 @@
             case 4:
                 MenuEventos();
                 break;
-            case 5: Dio();
+            case 5:
+                break;
+            case 6: Dio();
                 break;
             case 0:
                 Console.WriteLine("Obrigado pela preferencia, até breve");
@@ -84,6 +108,7 @@
         Console.WriteLine("Digite 2 para mostrar registro médico");
         Console.WriteLine("Digite 3 para mostrar médicos especificos");
         Console.WriteLine("Digite 4 para remover um médico");
+        Console.WriteLine("Digite 5 para atender pacientes na fila prioritária");
         Console.WriteLine("Digite 0 para voltar ao menu");
         Console.WriteLine("\nDigite sua opção ");
         string opcaoEscolhida = Console.ReadLine();
@@ -108,7 +133,6 @@
                 break;
         }
     }
-
      static void RegistrarMedicos()
     {
         Console.Clear();
@@ -125,7 +149,7 @@
         Medico novoMedico = new Medico(nomeDoMedico, especialidade, disponibilidade);
         
         
-        listaMedicos.Add(novoMedico); 
+        arvoreMedicos.Inserir(novoMedico);
        
         Console.WriteLine($"\nO médico {nomeDoMedico} foi registrado com sucesso");
         Console.WriteLine($"Especialização {especialidade}");
@@ -139,11 +163,7 @@
         Console.WriteLine("Exibindo registro médico");
         Console.WriteLine("**************************");
 
-        for (int i = 0; i < listaMedicos.Count(); i++)
-        {
-            Medico medico = listaMedicos.GetAt(i);
-            Console.WriteLine($"Médico: {medico.Nome} | Especialidade: {medico.Especialidade} | Disponibilidade: {medico.Disponibilidade}");
-        }
+        arvoreMedicos.EmOrdem();
 
         Console.WriteLine("\nPrecione qualquer tecla para voltar ao menu de médicos");
         Console.ReadKey();
@@ -153,56 +173,54 @@
     static void RemoverMedico()
     {
         Console.Clear();
-        Console.WriteLine("Digite o nome do médico que deseja remover");
-        string nomeDoMedico = Console.ReadLine();
-        
-        Medico medicoEncontrado = null;
+    Console.WriteLine("Digite o nome do médico que deseja remover:");
+    string nomeDoMedico = Console.ReadLine();
 
-        for(int i = 0; i < listaMedicos.Count();i++)
-        {
-            Medico medico = listaMedicos.GetAt(i);
-            if(medico.Nome.Equals(nomeDoMedico, StringComparison.OrdinalIgnoreCase))
-            {
-                medicoEncontrado = medico;
-                break;
-            }
-        }
-        if (medicoEncontrado != null)
-        {
-            listaMedicos.Remove(medicoEncontrado);
-            Console.WriteLine($"\nMédico {nomeDoMedico} removido com sucesso");
-        }
-        else
-        {
-            Console.WriteLine($"\nMédico {nomeDoMedico} não encontrado");
-        }
-        Console.WriteLine("Pressione qualquer tecla para voltar ao menu de médicos");
-        Console.ReadKey();
-        RegistroMedicos();
-    }
-    static void MedicoEspecificos(){
-        Console.Clear();
-        Console.WriteLine("Digite a especilização que você procura");
-        string especialidade = Console.ReadLine();
-    
-        bool medicoEncontrado = false;
-        for (int i = 0;i < listaMedicos.Count();i++){
-            
-            Medico medico = listaMedicos.GetAt(i);
-            
-            if (medico.Especialidade.Equals(especialidade, StringComparison.OrdinalIgnoreCase)){
-                 Console.WriteLine($"Médico: {medico.Nome} | Especialidade: {medico.Especialidade} | Disponibilidade: {medico.Disponibilidade}");
-                 medicoEncontrado = true;        
-            }
+    Medico medicoEncontrado = arvoreMedicos.Buscar(m => m.Nome.Equals(nomeDoMedico, StringComparison.OrdinalIgnoreCase));
 
-        }
-        if(!medicoEncontrado){
-            Console.WriteLine("Nenhum médico encontrado com essa especialidade.");
-            }
-            Console.WriteLine("Pressione qualquer tecla para voltar ao menu de médicos");
-            Console.ReadKey();
-            RegistroMedicos();
+    if (medicoEncontrado != null)
+    {
+        arvoreMedicos.Remover(medicoEncontrado);
+        Console.WriteLine($"\nMédico '{nomeDoMedico}' removido com sucesso.");
     }
+    else
+    {
+        Console.WriteLine($"\nMédico '{nomeDoMedico}' não encontrado.");
+    }
+
+    Console.WriteLine("Pressione qualquer tecla para voltar ao menu de médicos.");
+    Console.ReadKey();
+    RegistroMedicos();
+    }
+    static void MedicoEspecificos()
+{
+    Console.Clear();
+    Console.WriteLine("Digite a especialização que você procura:");
+    string especialidade = Console.ReadLine();
+
+    bool medicoEncontrado = false;
+
+    Console.WriteLine("\nMédicos encontrados com a especialidade informada:");
+    Console.WriteLine("---------------------------------------------------");
+
+    arvoreMedicos.Percorrer(medico =>
+    {
+        if (medico.Especialidade.Equals(especialidade, StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine($"Médico: {medico.Nome} | Especialidade: {medico.Especialidade} | Disponibilidade: {medico.Disponibilidade}");
+            medicoEncontrado = true;
+        }
+    });
+
+    if (!medicoEncontrado)
+    {
+        Console.WriteLine("Nenhum médico encontrado com essa especialidade.");
+    }
+
+    Console.WriteLine("\nPressione qualquer tecla para voltar ao menu de médicos.");
+    Console.ReadKey();
+    RegistroMedicos();
+}
 
     static void RegistroPacientes()
     {
@@ -213,6 +231,7 @@
         Console.WriteLine("Digite 4 para remover um paciente");
         Console.WriteLine("Digite 5 para ver o histórico de ações");
         Console.WriteLine("Digite 6 para desfazer ultima ação");
+        Console.WriteLine("Digite 7 para atender pacientes na fila prioritária");
         Console.WriteLine("Digite 0 para voltar ao menu");
         Console.WriteLine("\nDigite sua opção ");
         string opcaoEscolhida = Console.ReadLine();
@@ -230,6 +249,8 @@
             case 5: MostrarHistoricoDeAcoes();
                 break;
             case 6:DesfazerUltimaAcao();
+                break;
+            case 7:AtenderPacientesFila();
                 break;
             case 0:
                 Menu();
@@ -276,9 +297,31 @@
             Console.WriteLine("Digite uma data válida no formato dd/MM/yyyy");
         }        
     }
-    Paciente novoPaciente = new Paciente(nomePaciente,idadePaciente,historicoMedico,dataConsulta);
-    listaPacientes.Add(novoPaciente);
+    string estadoPaciente = "";
+    bool estadoValido = false;
+
+    while (!estadoValido)
+    {
+        Console.WriteLine("Digite o estado do paciente (Exemplo: Grave, Pouca urgencia e Sem urgencia)");
+        estadoPaciente = Console.ReadLine();
     
+        if(estadoPaciente.Equals("Grave", StringComparison.OrdinalIgnoreCase) ||
+        estadoPaciente.Equals("Pouca urgencia", StringComparison.OrdinalIgnoreCase) ||
+        estadoPaciente.Equals("Sem urgencia", StringComparison.OrdinalIgnoreCase))
+        {
+            estadoValido = true;
+        }
+        else
+        {
+            Console.WriteLine("Estado inválido. Insira um estado válido");
+        }
+    }
+    
+    var novoPaciente = new Paciente(nomePaciente,idadePaciente,historicoMedico,estadoPaciente,dataConsulta);
+    listaPacientes.Add(novoPaciente);
+    filaPrioritariaPacientes.Enqueue(novoPaciente);
+
+
     Console.WriteLine($"\nPaciente {nomePaciente} registrado com sucesso");
 
     RegistroPaciente();
@@ -438,10 +481,33 @@
     Console.WriteLine("\nPressione qualquer tecla para voltar ao menu de pacientes.");
     Console.ReadKey();
     RegistroPacientes();
-    }
-    
+    }    
 }
+static void AtenderPacientesFila()
+{
+    Console.Clear();
+        Console.WriteLine("*************************");
+        Console.WriteLine("Atendimento de Pacientes:");
+        Console.WriteLine("*************************");
 
+        if (filaPrioritariaPacientes.IsEmpty())
+        {
+            Console.WriteLine("Não há pacientes na fila de atendimento");
+        }
+        else
+        {
+            var paciente = filaPrioritariaPacientes.Dequeue();
+            Console.WriteLine($"Atendendo paciente: {paciente.Nome}");
+            Console.WriteLine($"Idade: {paciente.Idade}");
+            Console.WriteLine($"Estado: {paciente.EstadoPaciente}");
+            Console.WriteLine($"Histórico Médico: {paciente.HistoricoMedico}");
+        }
+        Console.WriteLine("\nPressione qualquer tecla para voltar ao menu de pacientes.");
+        Console.ReadKey();
+        RegistroPacientes();
+
+
+}
 
 
 }
@@ -456,6 +522,8 @@
         Console.WriteLine("Digite 6 para registrar conta");
         Console.WriteLine("Digite 7 para fechar conta");
         Console.WriteLine("Digite 8 para desfazer a última alteração no cardápio");
+        Console.WriteLine("Digite 8 para desfazer a última alteração na mesa");
+
         Console.WriteLine("Digite 0 para voltar ao menu");
         Console.WriteLine("\nDigite sua opção ");
         string opcaoEscolhida = Console.ReadLine();
@@ -502,6 +570,23 @@
             }
         }
     Mesa mesa = listaMesas.GetAt(numMesa - 1);
+    
+    if(mesa.Status.ToLower() != "livre")
+    {
+        Console.WriteLine("Esta mesa está ocupada, adicionar cliente á fila de espera ? (S/N) ");
+         string resposta = Console.ReadLine().ToLower();
+         if(resposta == "s")
+         {
+            Console.WriteLine("Digite o nome do cliente para adicionar à fila");
+            string nomeClienteFila = Console.ReadLine();
+            filaEspera.Queue(nomeClienteFila);
+            Console.WriteLine($"Cliente '{nomeClienteFila}' foi adicionado à fila de espera");
+         }
+        Console.WriteLine("Pressione qualquer tecla para voltar ao menu do restaurante");
+        Console.ReadKey();
+        MenuRestaurante();
+        return;    
+    }
     
     Console.WriteLine("Digite o nome e sobrenome do cliente");    
          string nomeCliente = Console.ReadLine();
@@ -695,7 +780,7 @@
     }
     
     static void FecharConta()
-    {
+{
     Console.Clear();
     Console.Write("Digite o número da mesa que deseja fechar a conta: ");
     int numMesa;
@@ -720,6 +805,7 @@
     for (int i = 0; i < listaPedidos.Count(); i++)
     {
         Itens item = listaPedidos.GetAt(i);
+        
         if (item != null && item.Quantidade > 0)
         {
             valorTotal += item.Quantidade * item.Valor;
@@ -742,7 +828,7 @@
     Console.WriteLine("\nPressione qualquer tecla para fechar a conta e liberar a mesa");
     Console.ReadKey();
 
-      bool descontoAplicado = false;
+    bool descontoAplicado = false;
     foreach (var medico in listaMedicos)
     {
         if (medico.Nome.Equals(mesa.NomeCliente, StringComparison.OrdinalIgnoreCase))
@@ -755,8 +841,6 @@
         }
     }
 
-
-
     mesa.Status = "livre";
     mesa.NomeCliente = "";
 
@@ -764,13 +848,39 @@
     {
         listaPedidos.RemoveAt(i);
     }
+    
+    Console.WriteLine($"Conta da mesa {numMesa} fechada e mesa liberada com sucesso");
 
-    Console.WriteLine($"Conta da mesa {numMesa} fechada e mesa liberada com sucesso.");
+    if(!filaEspera.IsEmpty())
+    {
+        string proximoCliente = filaEspera.Dequeue();
+        
+        bool mesaAlocada = false;
+        for (int i = 0; i < listaMesas.Count(); i++)
+        {
+            Mesa mesaLivre = listaMesas.GetAt(i);
+            if (mesaLivre.Status.ToLower() == "livre")
+            {
+                mesaLivre.NomeCliente = proximoCliente;
+                mesaLivre.Status = "ocupado";
+                listaMesas.ReplaceAt(i, mesaLivre);
+                Console.WriteLine($"Cliente '{proximoCliente}' foi alocado para a mesa {mesaLivre.NumMesa}");
+                mesaAlocada = true;
+                break;
+            }
+        }
+
+        if (!mesaAlocada)
+        {
+            Console.WriteLine($"Todas as mesas estão ocupadas. Cliente '{proximoCliente}' permanece na fila");
+            filaEspera.Queue(proximoCliente);
+        }
+    }
+
     Console.WriteLine("Pressione qualquer tecla para voltar ao menu.");
     Console.ReadKey();
-
     MenuRestaurante();
-    }  
+}
     static void DesfazerAlteracaoCardapio()
     {
         Console.Clear();
@@ -829,9 +939,6 @@ static void DesfazerAlteracaoMesa()
     Console.ReadKey();
     MenuRestaurante();
 }
-
-
-
 }
    static void MenuEventos()
    {

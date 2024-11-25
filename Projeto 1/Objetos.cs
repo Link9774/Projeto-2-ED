@@ -1,14 +1,27 @@
-public class Medico
+public class Medico : IComparable<Medico>
 {
-public string Nome { get; set; }
-public string Especialidade { get; set; }
-public string Disponibilidade { get; set; }
+    public string Nome { get; set; }
+    public string Especialidade { get; set; }
+    public string Disponibilidade { get; set; }
 
     public Medico(string nome, string especialidade, string disponibilidade)
     {
         Nome = nome;
         Especialidade = especialidade;
         Disponibilidade = disponibilidade;
+    }
+
+    public int CompareTo(Medico other)
+    {
+        if (other == null) return 1;
+
+        int comparacaoEspecialidade = string.Compare(this.Especialidade, other.Especialidade, StringComparison.OrdinalIgnoreCase);
+        if (comparacaoEspecialidade != 0)
+        {
+            return comparacaoEspecialidade;
+        }
+
+        return string.Compare(this.Disponibilidade, other.Disponibilidade, StringComparison.OrdinalIgnoreCase);
     }
     public override string ToString()
     {
@@ -21,13 +34,14 @@ public class Paciente
     public int Idade { get; set; }
     public string HistoricoMedico { get; set; }
     public DateTime DataConsulta{ get; set; }
-
-    public Paciente(string nome, int idade, string historicoMedico, DateTime dataConsulta)
+    public string EstadoPaciente { get; set; }
+    public Paciente(string nome, int idade, string historicoMedico,string estadoPaciente, DateTime dataConsulta)
     {
         Nome = nome;
         Idade = idade;
         HistoricoMedico = historicoMedico;
         DataConsulta = dataConsulta;
+        EstadoPaciente = estadoPaciente;
     }
 }
 public class Mesa
@@ -43,19 +57,24 @@ public class Mesa
         Status = status;
     }
 }
-public class Itens
+public class Itens : IComparable<Itens>
 {
     public string NomeItem { get; set; }
     public int Quantidade { get; set; }
-    public float Valor{ get; set; }
+    public float Valor { get; set; }
 
-    public Itens(string nomeItem, int quantidade,float valor)
+    public Itens(string nomeItens, int quantidade, float valor)
     {
-        NomeItem = nomeItem;
+        NomeItem = nomeItens;
         Quantidade = quantidade;
         Valor = valor;
     }
 
+    public int CompareTo(Itens other)
+    {
+        if (other == null) return 1;
+        return Quantidade.CompareTo(other.Quantidade);
+    }
 }
 public class Eventos
 {
@@ -101,6 +120,7 @@ public class AcaoPedido
     public string TipoAcao { get; set; }
     public Itens Item { get; set; }
     public int Quantidade { get; set; }
+
     public AcaoPedido(string tipoAcao, Itens item, int quantidade)
     {
         TipoAcao = tipoAcao;
